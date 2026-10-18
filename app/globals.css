@@ -1,26 +1,120 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --surface: #f7f6f2;
+  --ink: #1d2823;
+  --muted: #66716b;
+  --line: #e3e0d6;
+  --accent: #1d7a5f;
+  --wash: #eef3ef;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --surface: #141917;
+  --ink: #f3f1ea;
+  --muted: #aeb8b2;
+  --line: #2b3430;
+  --accent: #8dceba;
+  --wash: #1c2421;
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-roboto-slab), Georgia, serif;
+  font-size: 18px;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+}
+
+.page-surface {
+  background:
+    linear-gradient(180deg, var(--wash), transparent 280px),
+    var(--surface);
+  color: var(--ink);
+}
+
+.hero-stroke {
+  position: absolute;
+  top: 3rem;
+  right: -8vw;
+  z-index: 0;
+  width: min(62rem, 110vw);
+  aspect-ratio: 1289 / 768;
+  background: url("/brush-stroke.png") center / contain no-repeat;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.dark .hero-stroke {
+  opacity: 0.32;
+}
+
+.draw-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.dark .draw-canvas {
+  opacity: 0.4;
+}
+
+.page-surface > main,
+.page-surface > footer {
+  position: relative;
+  z-index: 1;
+}
+
+.section-label {
+  margin-bottom: 1.25rem;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.link {
+  color: var(--ink);
+  text-underline-offset: 0.22em;
+  text-decoration-color: transparent;
+  text-decoration-line: underline;
+  transition: text-decoration-color 180ms ease, color 180ms ease;
+}
+
+.link:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .link,
+  a,
+  button {
+    transition: none;
+  }
 }

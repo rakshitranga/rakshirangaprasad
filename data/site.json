@@ -1,0 +1,117 @@
+{
+  "metadata": {
+    "title": "Rakshi Rangaprasad",
+    "description": "Rakshi Rangaprasad is a junior studying computer engineering at Tufts University, interested in software, machine learning, embedded systems, robotics, and medicine.",
+    "keywords": ["Rakshi Rangaprasad", "Tufts University", "computer engineering", "robotics", "medical technology"]
+  },
+  "person": {
+    "name": "Rakshi Rangaprasad",
+    "role": "Computer Engineering @ Tufts University",
+    "note": "Previously @ Onshape",
+    "location": "Greater Boston",
+    "summary": "I'm a junior studying computer engineering. Most of my work sits somewhere between software, machine learning, embedded systems, and robotics. I'm especially drawn to projects that serve the greater good.",
+    "availability": "Currently looking for internships for summer 2027.",
+    "email": "rakshit.rangaprasad@gmail.com"
+  },
+  "links": {
+    "github": "https://github.com/rakshitranga",
+    "linkedin": "https://www.linkedin.com/in/rakshit-rangaprasad",
+    "resume": "/resume.pdf"
+  },
+  "experience": [
+    {
+      "organization": "Project Oath",
+      "role": "Co-founder and technical lead",
+      "dates": "Apr 2026 - Present",
+      "detail": "Built and scaled a free mentorship platform for students in the medical pipeline, now with about 200 members from undergraduate programs and medical schools around the United States."
+    },
+    {
+      "organization": "Onshape by PTC",
+      "role": "Software engineer intern, R&D",
+      "dates": "Jun 2026 - Aug 2026",
+      "place": "Boston",
+      "detail": "● Reduced locale update times by 80% by engineering a streamlined update system and integrating region preference selection directly into the onboarding flow, significantly driving global locale adoption.\n● Diagnosed critical bugs across TypeScript, Angular, and Java, improving application stability and user experience.\n● Authored robust JUnit tests to validate complex CAD features (query updates, feature selection)."
+    },
+    {
+      "organization": "Tufts Data Science Club - NSDC",
+      "role": "Datathon coordinator",
+      "dates": "Jan 2026 - Present",
+      "detail": "Organized a datathon judged by people working in machine learning and AI at Nasdaq and Tufts."
+    },
+    {
+      "organization": "Ascend Tufts University",
+      "role": "Co-founder",
+      "dates": "Aug 2025 - Present",
+      "detail": "Started the first Pan-Asian business organization at Tufts."
+    },
+    {
+      "organization": "Tufts JumboCode",
+      "role": "Software developer",
+      "dates": "Sep 2024 - Apr 2026",
+      "place": "Medford",
+      "detail": "Built software for English at Large in 2025 and Beantown Baby Diaper Bank in 2026."
+    },
+    {
+      "organization": "Brillio",
+      "role": "Software engineer intern",
+      "dates": "Jul 2025 - Aug 2025",
+      "detail": ""
+    },
+    {
+      "organization": "Tufts Biomedical Engineering",
+      "role": "Research scholar, Georgakoudi Lab",
+      "dates": "Jun 2023 - Aug 2023",
+      "place": "Medford",
+      "detail": "Undergraduate research in the Department of Biomedical Engineering."
+    }
+  ],
+  "projects": [
+    {
+      "name": "Project Oath",
+      "detail": "A mentorship platform for students working toward careers in medicine.",
+      "url": "https://www.linkedin.com/in/rakshit-rangaprasad"
+    },
+    {
+      "name": "CarbonQuest",
+      "detail": "A small app for keeping track of carbon emissions.",
+      "url": "https://www.congressionalappchallenge.us/23-ma06/"
+    },
+    {
+      "name": "Nami",
+      "detail": "A more supportive way to think about medication adherence.",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7357038504725364738/"
+    },
+    {
+      "name": "Fitwise",
+      "detail": "Fitness guidance with real-time exercise feedback.",
+      "url": "https://devpost.com/software/fitwise"
+    },
+    {
+      "name": "Fovea",
+      "detail": "Learning insights using eye tracking.",
+      "url": "https://plume.hackmit.org/project/qzfjw-rbmam-osybf-wwsqc"
+    },
+    {
+      "name": "FlowTab",
+      "detail": "A calmer new-tab page for the browser.",
+      "url": "https://chromewebstore.google.com/detail/flowtab/ainabceojclhldicflamfgghhkmmcnlo"
+    }
+  ],
+  "education": [
+    {
+      "school": "Tufts University",
+      "credential": "B.S. Computer Engineering",
+      "dates": "Sep 2024 - May 2028"
+    },
+    {
+      "school": "Mystic Valley Regional Charter School",
+      "credential": "High school and International Baccalaureate Diploma",
+      "dates": "Aug 2020 - Jun 2024"
+    }
+  ],
+  "aside": {
+    "skills": ["Arduino", "Java", "Computer-aided design", "Python", "Embedded systems"],
+    "languages": ["English", "Tamil"],
+    "recognition": ["Certificate of Special Congressional Recognition", "Onshape CAD Basics"]
+  }
+}
