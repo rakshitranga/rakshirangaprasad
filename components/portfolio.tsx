@@ -22,10 +22,22 @@ const defaultCategory = "bg-amber-100 text-amber-800";
 
 function matches(project: Project, query: string) {
   const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
-  const haystack = [project.name, project.category, project.summary, project.ee ? "ee electrical" : "", ...project.skills]
+  const haystack = [
+    project.name,
+    project.category,
+    project.summary,
+    project.ee ? "ee electrical engineering" : "",
+    project.ai ? "ai artificial intelligence" : "",
+    project.swe ? "swe software engineering" : "",
+    ...project.skills,
+  ]
     .join(" ")
     .toLowerCase();
-  return terms.every((term) => haystack.includes(term));
+  return terms.every((term) => {
+    if (term === "ai") return Boolean(project.ai);
+    if (term === "swe") return Boolean(project.swe);
+    return haystack.includes(term);
+  });
 }
 
 function ProjectCard({ project, onTag }: { project: Project; onTag: (tag: string) => void }) {
@@ -44,6 +56,16 @@ function ProjectCard({ project, onTag }: { project: Project; onTag: (tag: string
             <Cpu size={12} /> Electrical Engineering
           </span>
         )}
+        {project.ai && (
+          <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-semibold text-violet-800">
+            AI
+          </span>
+        )}
+        {project.swe && (
+          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-800">
+            SWE
+          </span>
+        )}
       </div>
       <h3 className="mt-2 text-xl font-semibold">{project.name}</h3>
       <button
@@ -54,6 +76,15 @@ function ProjectCard({ project, onTag }: { project: Project; onTag: (tag: string
         {project.category}
       </button>
       <p className="mt-3 text-sm leading-relaxed text-(--muted)">{project.summary}</p>
+
+      {project.image && (
+        <Image
+          src={project.image.src}
+          alt={project.image.alt}
+          sizes="(max-width: 767px) 100vw, 500px"
+          className="mt-4 h-auto w-full rounded-xl border border-(--line)"
+        />
+      )}
 
       {project.youtubeId && (
         <div className="mt-4 aspect-video overflow-hidden rounded-xl border border-(--line)">
@@ -267,20 +298,43 @@ export function Portfolio({ site }: { site: Site }) {
               ))}
             </ul>
 
-            <h2 className="section-label">Where I&apos;ve studied</h2>
+            <h2 className="section-label pt-10">Campus leadership</h2>
+            <ul className="space-y-2 text-sm">
+              {site.activities.map((item) => (
+                <li key={item.organization}>
+                  <span className="font-medium">{item.role}, {item.organization}</span>
+                </li>
+              ))}
+            </ul>
+
+            <h2 className="section-label pt-10">Where I&apos;ve studied</h2>
             <ul className="space-y-2 text-sm">
               {site.education.map((item) => (
-                <li key={item.school} className="flex flex-wrap justify-between gap-x-4">
-                  <span>
-                    {item.school}, {item.credential}
-                  </span>
-                  <span className="text-(--muted)">{item.dates}</span>
+                <li key={item.school}>
+                  <div className="flex flex-wrap justify-between gap-x-4">
+                    <span>
+                      {item.school}, {item.credential}
+                    </span>
+                    <span className="text-(--muted)">{item.dates}</span>
+                  </div>
+                  {item.coursework.length > 0 && (
+                    <div className="mt-3 mb-5">
+                      <p className="mb-2 text-(--muted)">Relevant coursework</p>
+                      <ul className="flex flex-wrap gap-2">
+                        {item.coursework.map((course) => (
+                          <li key={course} className="rounded-full bg-sky-50 px-3 py-1 text-xs text-sky-800 ring-1 ring-sky-200">
+                            {course}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
 
             <p className="mt-10 text-sm text-(--muted)">
-              {site.person.availability} Say hi at <a className="link" href={`mailto:${site.person.email}`}>{site.person.email}</a>
+              {site.person.availability} Reach out at <a className="link" href={`mailto:${site.person.email}`}>{site.person.email}</a>!
             </p>
           </section>
         </main>

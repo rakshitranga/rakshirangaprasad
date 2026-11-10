@@ -9,9 +9,9 @@
     "role": "Electrical Engineering @ Tufts University",
     "note": "Previously @ Onshape",
     "location": "Greater Boston",
-    "summary": "I'm a junior studying electrical engineering. Most of my work sits somewhere between software, machine learning, embedded systems, and robotics. I'm especially drawn to projects that serve the greater good.",
-    "availability": "Currently looking for internships for summer 2027.",
-    "email": "rakshit.rangaprasad@gmail.com"
+    "summary": "My interests lie at the intersection of embedded systems, electronics, and software engineering. I'm particularly excited by the engineering behind intelligent medical devices, robotics, climate tech, audio, and sensor-based systems. I’m currently looking for internships for summer 2027. Feel free to reach out at rakshit.rangaprasad [at] tufts [dot] edu!",
+    "availability": "I'm looking for internships for summer 2027!",
+    "email": "rakshit.rangaprasad@tufts.edu"
   },
   "links": {
     "github": "https://github.com/rakshitranga",
@@ -50,6 +50,12 @@
       "dates": "Sep 2024 - Apr 2026",
       "place": "Medford",
       "detail": "Built software for English at Large in 2025 and Beantown Baby Diaper Bank in 2026."
+    }
+  ],
+  "activities": [
+    {
+      "organization": "Hindu Students Association",
+      "role": "Treasurer"
     }
   ],
   "projects": [
@@ -94,12 +100,24 @@
     {
       "school": "Tufts University",
       "credential": "B.S. Electrical Engineering",
-      "dates": "Sep 2024 - May 2028"
+      "dates": "Sep 2024 - May 2028",
+      "coursework": [
+        "Linear Algebra",
+        "Multivariable Calculus",
+        "Embedded Systems",
+        "Machine Learning",
+        "Digital Logic",
+        "Data Structures",
+        "Discrete Mathematics",
+        "Computer Organization (In Progress)",
+        "Intro to Circuits (In Progress)"
+      ]
     },
     {
       "school": "Mystic Valley Regional Charter School",
       "credential": "High school and International Baccalaureate Diploma",
-      "dates": "Aug 2020 - Jun 2024"
+      "dates": "Aug 2020 - Jun 2024",
+      "coursework": []
     }
   ],
   "aside": {

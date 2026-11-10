@@ -1,12 +1,20 @@
+import type { StaticImageData } from "next/image";
+import congressionalAppChallengeLogo from "@/public/caclogo.png";
+import juniorDesignImage from "@/public/juniordesignimage.png";
+import portaPotImage from "@/public/porta-pot.png";
+
 export type Project = {
   name: string;
   date: string; // YYYY-MM, used for sorting (newest first)
   dateLabel: string;
   category: string;
   ee?: boolean;
+  ai?: boolean;
+  swe?: boolean;
   archived?: boolean;
   summary: string;
   skills: string[];
+  image?: { src: StaticImageData; alt: string };
   youtubeId?: string;
   links: { label: string; href: string }[];
 };
@@ -18,6 +26,7 @@ export const projects: Project[] = [
     dateLabel: "Hackachusetts, 2026",
     category: "Public Safety",
     ee: true,
+    swe: true,
     summary:
       "Firefighter search-priority system that uses Wi-Fi channel state information and a 1-D CNN to detect signs of movement. ESP32 firmware for transmitters, CSI receivers and responder tags, a FastAPI hub, and a live responder dashboard with floor plans.",
     skills: ["ESP32", "C", "Wi-Fi CSI", "TensorFlow Lite", "Python", "FastAPI", "WebSockets", "TypeScript"],
@@ -36,6 +45,7 @@ export const projects: Project[] = [
     summary:
       "ESP32-S3 vehicle with L293D H-bridge dual motor drive, PWM tuning, IR obstacle sensing with ADC conditioning, magnetic encoders and odometry. Chassis designed in Onshape, PCB in KiCad, debugged with an oscilloscope.",
     skills: ["ESP32-S3", "C++", "PlatformIO", "PWM", "ADC", "Encoders", "KiCad", "Onshape", "Oscilloscope"],
+    image: { src: juniorDesignImage, alt: "Autonomous robotic vehicle prototype with its electronics and wheels" },
         links: [
           {
             label: "Onshape document",
@@ -48,8 +58,9 @@ export const projects: Project[] = [
     date: "2026-04",
     dateLabel: "Apr 2026 - Present",
     category: "Healthcare",
+    swe: true,
     summary:
-      "Credit-based mentorship exchange for students in the medical pipeline, spanning 91 high schools, 57 colleges and 22 medical schools with 150+ mentorship sessions. Sole developer and founding technical lead.",
+      "Credit-based mentorship exchange for students in the medical pipeline, spanning 91 high schools, 57 colleges and 22 medical schools with 150+ mentorship sessions. I'm the founding technical lead!",
     skills: ["React", "TailwindCSS", "PostgreSQL", "Supabase"],
     links: [{ label: "projectoath.com", href: "https://projectoath.com/" }],
   },
@@ -58,9 +69,11 @@ export const projects: Project[] = [
     date: "2025-11",
     dateLabel: "2025",
     category: "Engineering Tools",
+    ai: true,
+    swe: true,
     summary:
       "An MCP server that lets AI agents drive Onshape CAD. Built before the official Onshape MCP; appreciated by Jon Hirschtick, founder of SolidWorks and Onshape.",
-    skills: ["MCP", "AI", "CAD", "Onshape API"],
+    skills: ["MCP", "CAD", "Onshape API"],
     youtubeId: "bsL_8EN9Ih0",
     links: [{ label: "GitHub", href: "https://github.com/nisheshnath-spec/OnshapeMCP" }],
   },
@@ -73,6 +86,7 @@ export const projects: Project[] = [
     summary:
       "Remote-controlled planter for the EE14 embedded systems course. I designed the block diagram and wrote the NRF24L01 SPI radio code; joystick via ADC drives DC motors through a DRV8833.",
     skills: ["SPI", "NRF24L01", "DRV8833", "ADC", "DC Motors", "C"],
+    image: { src: portaPotImage, alt: "Porta-Pot planter prototype alongside its electronics block diagram" },
     links: [{ label: "GitHub", href: "https://github.com/natphua/porta-pot" }],
   },
   {
@@ -80,18 +94,24 @@ export const projects: Project[] = [
     date: "2025-10",
     dateLabel: "HackHarvard 2025",
     category: "Health & Fitness",
+    ai: true,
+    swe: true,
     summary:
       "Real-time AI fitness coach built in two days with three friends: pose tracking, rep counting and voice feedback.",
     skills: ["MediaPipe", "Computer Vision", "Flask-SocketIO", "Next.js", "Gemini API", "ElevenLabs"],
     youtubeId: "rpG1Po_12Vk",
-    links: [{ label: "Devpost", href: "https://devpost.com/software/fitwise" }],
+    links: [
+      { label: "GitHub", href: "https://github.com/kubsgok/FitWise" },
+      { label: "Devpost", href: "https://devpost.com/software/fitwise" },
+    ],
   },
   {
     name: "FlowTab",
-    date: "2025-03",
-    dateLabel: "2025",
+    date: "2023-03",
+    dateLabel: "2023",
     archived: true,
     category: "Productivity",
+    swe: true,
     summary: "A calmer new-tab page for the browser.",
     skills: ["JavaScript", "Chrome Extension"],
     links: [
@@ -107,8 +127,10 @@ export const projects: Project[] = [
     dateLabel: "2023",
     archived: true,
     category: "Sustainability",
-    summary: "A small app for keeping track of carbon emissions.",
+    swe: true,
+    summary: "An app for tracking carbon emissions that won the Congressional App Challenge for Representative Seth Moulton's Massachusetts 6th district (MA-06).",
     skills: ["App Development"],
+    image: { src: congressionalAppChallengeLogo, alt: "Congressional App Challenge logo" },
     links: [{ label: "Congressional App Challenge", href: "https://www.congressionalappchallenge.us/23-ma06/" }],
   },
 ];
