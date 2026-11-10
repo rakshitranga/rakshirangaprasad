@@ -1,15 +1,15 @@
 {
   "metadata": {
     "title": "Rakshi Rangaprasad",
-    "description": "Rakshi Rangaprasad is a junior studying computer engineering at Tufts University, interested in software, machine learning, embedded systems, robotics, and medicine.",
-    "keywords": ["Rakshi Rangaprasad", "Tufts University", "computer engineering", "robotics", "medical technology"]
+    "description": "Rakshi Rangaprasad is a junior studying electrical engineering at Tufts University, interested in software, machine learning, embedded systems, robotics, and medicine.",
+    "keywords": ["Rakshi Rangaprasad", "Tufts University", "electrical engineering", "robotics", "medical technology"]
   },
   "person": {
     "name": "Rakshi Rangaprasad",
-    "role": "Computer Engineering @ Tufts University",
+    "role": "Electrical Engineering @ Tufts University",
     "note": "Previously @ Onshape",
     "location": "Greater Boston",
-    "summary": "I'm a junior studying computer engineering. Most of my work sits somewhere between software, machine learning, embedded systems, and robotics. I'm especially drawn to projects that serve the greater good.",
+    "summary": "I'm a junior studying electrical engineering. Most of my work sits somewhere between software, machine learning, embedded systems, and robotics. I'm especially drawn to projects that serve the greater good.",
     "availability": "Currently looking for internships for summer 2027.",
     "email": "rakshit.rangaprasad@gmail.com"
   },
@@ -50,22 +50,15 @@
       "dates": "Sep 2024 - Apr 2026",
       "place": "Medford",
       "detail": "Built software for English at Large in 2025 and Beantown Baby Diaper Bank in 2026."
-    },
-    {
-      "organization": "Brillio",
-      "role": "Software engineer intern",
-      "dates": "Jul 2025 - Aug 2025",
-      "detail": ""
-    },
-    {
-      "organization": "Tufts Biomedical Engineering",
-      "role": "Research scholar, Georgakoudi Lab",
-      "dates": "Jun 2023 - Aug 2023",
-      "place": "Medford",
-      "detail": "Undergraduate research in the Department of Biomedical Engineering."
     }
   ],
   "projects": [
+    {
+      "name": "Beacon",
+      "detail": "Wi-Fi sensing and machine learning help first responders identify signs of movement during emergencies.",
+      "url": "https://www.sundai.club/projects/4c84b8ee-c3f9-4e6b-86af-993acf7b7954",
+      "videoUrl": "https://youtu.be/2WN5VsAbgl0"
+    },
     {
       "name": "Project Oath",
       "detail": "A mentorship platform for students working toward careers in medicine.",
@@ -100,7 +93,7 @@
   "education": [
     {
       "school": "Tufts University",
-      "credential": "B.S. Computer Engineering",
+      "credential": "B.S. Electrical Engineering",
       "dates": "Sep 2024 - May 2028"
     },
     {

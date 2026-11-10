@@ -1,181 +1,289 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
-import { Menu, X } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { motion, useScroll, useSpring } from "motion/react";
+import { ChevronDown, Cpu, ExternalLink, Search, X } from "lucide-react";
+import Image from "next/image";
 
-import { StrokeCanvas } from "@/components/stroke-canvas";
+import { projects, type Project } from "@/data/projects";
 
 type Site = typeof import("@/data/site.json");
 
-function subscribeToTheme(onChange: () => void) {
-  window.addEventListener("theme-change", onChange);
-  return () => window.removeEventListener("theme-change", onChange);
+const categoryColors: Record<string, string> = {
+  Healthcare: "bg-rose-100 text-rose-700",
+  Education: "bg-violet-100 text-violet-700",
+  Robotics: "bg-emerald-100 text-emerald-800",
+  "Public Safety": "bg-orange-100 text-orange-800",
+  "Embedded Systems": "bg-teal-100 text-teal-800",
+  "Health & Fitness": "bg-pink-100 text-pink-700",
+  "Non-profit": "bg-fuchsia-100 text-fuchsia-700",
+};
+const defaultCategory = "bg-amber-100 text-amber-800";
+
+function matches(project: Project, query: string) {
+  const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+  const haystack = [project.name, project.category, project.summary, project.ee ? "ee electrical" : "", ...project.skills]
+    .join(" ")
+    .toLowerCase();
+  return terms.every((term) => haystack.includes(term));
 }
 
-function getTheme() {
-  return window.localStorage.getItem("theme") === "dark" ? "dark" : "light";
-}
+function ProjectCard({ project, onTag }: { project: Project; onTag: (tag: string) => void }) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className={`rounded-xl border bg-white p-5 shadow-sm ${project.ee ? "border-sky-300" : "border-(--line)"}`}
+    >
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-(--muted)">{project.dateLabel}</span>
+        {project.ee && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-800">
+            <Cpu size={12} /> Electrical Engineering
+          </span>
+        )}
+      </div>
+      <h3 className="mt-2 text-xl font-semibold">{project.name}</h3>
+      <button
+        type="button"
+        onClick={() => onTag(project.category)}
+        className={`mt-2 rounded-full px-2.5 py-0.5 text-xs font-medium ${categoryColors[project.category] ?? defaultCategory}`}
+      >
+        {project.category}
+      </button>
+      <p className="mt-3 text-sm leading-relaxed text-(--muted)">{project.summary}</p>
 
-function updateTheme(theme: "light" | "dark") {
-  window.localStorage.setItem("theme", theme);
-  window.dispatchEvent(new Event("theme-change"));
-}
+      {project.youtubeId && (
+        <div className="mt-4 aspect-video overflow-hidden rounded-xl border border-(--line)">
+          <iframe
+            className="size-full"
+            src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}`}
+            title={`${project.name} video`}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
 
-const navigation = [
-  { href: "#work", label: "Work" },
-  { href: "#projects", label: "Projects" },
-  { href: "#education", label: "Education" },
-  { href: "#contact", label: "Contact" },
-];
+      <div className="mt-4 flex flex-wrap gap-1.5">
+        {project.skills.map((skill) => (
+          <button
+            key={skill}
+            type="button"
+            onClick={() => onTag(skill)}
+            className="rounded-full bg-sky-50 px-2.5 py-0.5 text-xs text-sky-800 ring-1 ring-sky-200 transition-colors hover:bg-sky-100"
+          >
+            {skill}
+          </button>
+        ))}
+      </div>
+
+      {project.links.length > 0 && (
+        <div className="mt-5 flex flex-wrap gap-3 text-sm">
+          {project.links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-sky-600 px-4 py-2 font-medium text-white transition-colors hover:bg-sky-700"
+            >
+              {link.label} <ExternalLink size={14} />
+            </a>
+          ))}
+        </div>
+      )}
+    </motion.article>
+  );
+}
 
 export function Portfolio({ site }: { site: Site }) {
-  const theme = useSyncExternalStore(subscribeToTheme, getTheme, () => "light" as const);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [archiveOpen, setArchiveOpen] = useState(false);
+  const timelineRef = useRef<HTMLDivElement>(null);
 
-  const closeMenu = () => setMenuOpen(false);
+  const { scrollYProgress } = useScroll({ target: timelineRef, offset: ["start 70%", "end 70%"] });
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.4 });
+
+  const sorted = useMemo(() => [...projects].sort((a, b) => b.date.localeCompare(a.date)), []);
+  const matchingProjects = useMemo(() => sorted.filter((project) => matches(project, query)), [sorted, query]);
+  const visible = matchingProjects.filter((project) => !project.archived);
+  const archived = matchingProjects.filter((project) => project.archived);
+
+  const toggleTag = (tag: string) => setQuery((current) => (current.toLowerCase() === tag.toLowerCase() ? "" : tag));
 
   return (
-    <div className={theme === "dark" ? "dark" : undefined}>
+    <div>
       <div className="page-surface relative min-h-screen overflow-x-clip">
-        <div className="hero-stroke" aria-hidden />
-        <StrokeCanvas />
-        <header className="sticky top-0 z-20 border-b border-(--line) bg-(--surface)/90 backdrop-blur-md">
-          <div className="mx-auto flex h-20 w-[min(1080px,calc(100%-2.5rem))] items-center justify-between">
-            <a href="#top" className="text-base font-medium" onClick={closeMenu}>
+        <header className="sticky top-0 z-30 border-b border-(--line) bg-(--surface)">
+          <div className="mx-auto flex w-[min(1080px,calc(100%-2rem))] items-center gap-3 py-3">
+            <a href="#top" className="hidden shrink-0 text-base font-semibold sm:block">
               {site.person.name}
             </a>
-            <nav className="hidden items-center gap-7 text-base text-(--muted) md:flex" aria-label="Primary">
-              {navigation.map((item) => (
-                <a key={item.href} href={item.href} className="transition-colors duration-200 hover:text-(--ink)">
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-            <div className="flex items-center gap-4">
-              <button
-                type="button"
-                className="text-base text-(--muted) transition-colors duration-200 hover:text-(--ink)"
-                onClick={() => updateTheme(theme === "light" ? "dark" : "light")}
-              >
-                {theme === "light" ? "Dark" : "Light"}
-              </button>
-              <button
-                type="button"
-                className="grid size-8 place-items-center md:hidden"
-                onClick={() => setMenuOpen(!menuOpen)}
-                aria-expanded={menuOpen}
-                aria-controls="mobile-navigation"
-                aria-label="Toggle navigation"
-              >
-                {menuOpen ? <X size={18} /> : <Menu size={18} />}
-              </button>
+            <div className="relative flex-1">
+              <Search size={16} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-(--muted)" />
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Looking for something? Try ESP32, python, healthcare..."
+                aria-label="Search projects"
+                                className="w-full rounded-full border border-(--line) bg-white py-2 pr-9 pl-9 text-sm outline-none focus:border-sky-500"
+              />
+              {query && (
+                <button
+                  type="button"
+                  aria-label="Clear search"
+                  onClick={() => setQuery("")}
+                  className="absolute top-1/2 right-3 -translate-y-1/2 text-(--muted)"
+                >
+                  <X size={16} />
+                </button>
+              )}
             </div>
           </div>
-          {menuOpen && (
-            <nav id="mobile-navigation" className="border-t border-(--line) px-5 py-4 md:hidden" aria-label="Mobile">
-              <div className="mx-auto flex w-[min(1080px,100%)] flex-col gap-3 text-base">
-                {navigation.map((item) => (
-                  <a key={item.href} href={item.href} onClick={closeMenu}>{item.label}</a>
-                ))}
-              </div>
-            </nav>
-          )}
         </header>
 
-        <main id="top" className="mx-auto w-[min(1080px,calc(100%-2.5rem))]">
-                  <section className="grid gap-12 py-20 sm:py-28 md:grid-cols-[1fr_18rem] md:items-end">
-            <div>
-                      <h1 className="max-w-3xl text-5xl leading-[1.05] font-medium tracking-[-0.04em] sm:text-6xl lg:text-7xl">
-                {site.person.role}
-              </h1>
-                      <p className="mt-6 max-w-2xl text-xl leading-9 text-(--muted)">{site.person.summary}</p>
-                      <p className="mt-5 text-lg text-(--accent)">{site.person.availability}</p>
-            </div>
-                    <div className="text-lg leading-8 text-(--muted)">
-              <p>{site.person.note}</p>
-              <p>{site.person.location}</p>
-              <div className="mt-5 flex flex-col items-start gap-1">
-                <a className="link" href={`mailto:${site.person.email}`}>Email</a>
-                <a className="link" href={site.links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-                <a className="link" href={site.links.github} target="_blank" rel="noreferrer">GitHub</a>
-                <a className="link" href={site.links.resume} target="_blank">Resume</a>
+        <main id="top" className="mx-auto w-[min(1080px,calc(100%-2rem))] pb-24">
+          <section className="py-12 text-center">
+            <div className="flex items-center justify-center gap-4 sm:gap-6">
+              <div className="size-20 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-sm sm:size-28">
+                <Image
+                  src="/newpicture.jpeg"
+                  alt={`Portrait of ${site.person.name}`}
+                  width={224}
+                  height={224}
+                  className="size-full scale-[1.8] object-cover object-[50%_48%]"
+                />
               </div>
+              <h1 className="text-left text-3xl font-semibold sm:text-4xl">Hi, I&apos;m {site.person.name}!</h1>
+            </div>
+            <p className="mt-2 text-(--muted)">
+              {site.person.role} · {site.person.note}
+            </p>
+            <p className="mx-auto mt-4 max-w-xl text-base text-(--muted)">{site.person.summary}</p>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-(--muted)">
+              Check out all the projects I&apos;ve been building! You can use the search bar above to filter out keywords.
+            </p>
+            <div className="mt-5 flex justify-center gap-5 text-sm">
+              <a className="link" href={site.links.github} target="_blank" rel="noreferrer">GitHub</a>
+              <a className="link" href={site.links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+              <a className="link" href={`mailto:${site.person.email}`}>Email</a>
+              <a className="link" href={site.links.resume}>Resume</a>
             </div>
           </section>
 
-          <section id="work" className="scroll-mt-20 pb-20">
-            <h2 className="section-label">Work</h2>
-            <div>
-              {site.experience.map((item) => (
-                <article key={`${item.organization}-${item.dates}`} className="grid gap-2 border-t border-(--line) py-8 transition-colors duration-300 hover:bg-(--wash) md:grid-cols-[13rem_1fr] md:gap-8">
-                                  <p className="text-base text-(--muted)">
-                    {item.dates}
-                    {item.place ? <span className="mt-1 block">{item.place}</span> : null}
-                  </p>
-                  <div>
-                    <h3 className="text-xl font-medium">{item.organization}</h3>
-                                        <p className="mt-1 text-base text-(--accent)">{item.role}</p>
-                                        {item.detail ? <p className="mt-3 max-w-2xl whitespace-pre-line text-base leading-7 text-(--muted)">{item.detail}</p> : null}
+          <div ref={timelineRef} className="relative">
+            <div className="absolute top-0 bottom-0 left-4 w-px -translate-x-1/2 bg-(--line) md:left-1/2" aria-hidden>
+              <motion.div
+                className="absolute inset-x-0 top-0 h-full origin-top bg-gradient-to-b from-sky-400 via-blue-500 to-indigo-500 shadow-[0_0_12px_3px_rgba(56,152,255,0.7)]"
+                style={{ scaleY: progress, width: 3, left: -1 }}
+              />
+            </div>
+
+            {visible.length === 0 && (
+              <p className="py-16 text-center text-(--muted)">
+                {archived.length > 0
+                  ? "Matching projects can be found in the archive below."
+                  : <>No projects match &ldquo;{query}&rdquo;.</>}
+              </p>
+            )}
+
+            <ol className="space-y-10">
+              {visible.map((project, index) => (
+                <li key={project.name} className="relative pl-10 md:grid md:grid-cols-2 md:gap-14 md:pl-0">
+                  <span
+                    className={`absolute top-6 left-4 size-3 -translate-x-1/2 rounded-full ring-4 ring-(--surface) md:left-1/2 ${
+                      project.ee ? "bg-sky-500 shadow-[0_0_10px_2px_rgba(56,152,255,0.6)]" : "bg-stone-400"
+                    }`}
+                  />
+                  <div className={index % 2 === 0 ? "md:col-start-1" : "md:col-start-2"}>
+                    <ProjectCard project={project} onTag={toggleTag} />
                   </div>
-                </article>
+                </li>
               ))}
-            </div>
-          </section>
+            </ol>
+          </div>
 
-          <section id="projects" className="scroll-mt-20 pb-20">
-            <h2 className="section-label">Projects</h2>
-            <div className="grid gap-x-12 sm:grid-cols-2">
-              {site.projects.map((project) => (
-                <a key={project.name} href={project.url} target="_blank" rel="noreferrer" className="group border-t border-(--line) py-6">
-                  <span className="flex items-baseline justify-between gap-4">
-                    <span className="text-xl font-medium transition-colors duration-200 group-hover:text-(--accent)">{project.name}</span>
-                                        <span className="text-base text-(--muted) transition-transform duration-200 group-hover:translate-x-1" aria-hidden>→</span>
+          <section className="mx-auto mt-16 max-w-3xl" aria-labelledby="archive-heading">
+            <h2 id="archive-heading">
+              <button
+                type="button"
+                aria-expanded={archiveOpen}
+                aria-controls="archive-projects"
+                onClick={() => setArchiveOpen((open) => !open)}
+                className="flex w-full items-center justify-between gap-4 rounded-xl border border-(--line) bg-white px-5 py-4 text-left font-semibold shadow-sm transition-colors hover:bg-amber-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+              >
+                <span>
+                  Archived / side projects
+                  <span className="ml-2 text-sm font-normal text-(--muted)">
+                    ({archived.length}{query.trim() ? " matching" : ""})
                   </span>
-                                      <span className="mt-2 block max-w-md text-base leading-7 text-(--muted)">{project.detail}</span>
-                </a>
-              ))}
-            </div>
-          </section>
-
-          <section id="education" className="scroll-mt-20 grid gap-12 border-t border-(--line) py-16 md:grid-cols-2">
-            <div>
-              <h2 className="section-label">Education</h2>
-              <div className="space-y-6">
-                {site.education.map((item) => (
-                  <article key={item.school}>
-                    <h3 className="text-xl font-medium">{item.school}</h3>
-                                        <p className="mt-1 text-base leading-7 text-(--muted)">{item.credential}</p>
-                                        <p className="mt-1 text-base text-(--muted)">{item.dates}</p>
-                  </article>
-                ))}
+                </span>
+                <ChevronDown
+                  size={20}
+                  aria-hidden="true"
+                  className={`shrink-0 transition-transform motion-reduce:transition-none ${archiveOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+            </h2>
+            <div
+              id="archive-projects"
+              aria-hidden={!archiveOpen}
+              inert={!archiveOpen}
+              className={`grid transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none ${archiveOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+            >
+              <div className="overflow-hidden">
+                {archived.length > 0 ? (
+                  <ul className="grid gap-5 pt-5 md:grid-cols-2">
+                    {archived.map((project) => (
+                      <li key={project.name}>
+                        <ProjectCard project={project} onTag={toggleTag} />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="pt-5 text-sm text-(--muted)">No archived projects match this search.</p>
+                )}
               </div>
             </div>
-            <div>
-              <h2 className="section-label">Also</h2>
-              <dl className="space-y-5 text-base leading-7">
-                <div>
-                  <dt className="text-(--muted)">Skills</dt>
-                  <dd>{site.aside.skills.join(", ")}</dd>
-                </div>
-                <div>
-                  <dt className="text-(--muted)">Languages</dt>
-                  <dd>{site.aside.languages.join(" and ")}</dd>
-                </div>
-                <div>
-                  <dt className="text-(--muted)">Recognition</dt>
-                  <dd>{site.aside.recognition.join(" · ")}</dd>
-                </div>
-              </dl>
-            </div>
+          </section>
+
+          <section id="experience" className="mt-24 border-t border-(--line) pt-10">
+            <h2 className="section-label">Where I&apos;ve worked</h2>
+            <ul className="space-y-5">
+              {site.experience.map((item) => (
+                <li key={item.organization + item.role} className="text-sm">
+                  <div className="flex flex-wrap justify-between gap-x-4">
+                    <span className="font-medium">
+                      {item.role}, {item.organization}
+                    </span>
+                    <span className="text-(--muted)">{item.dates}</span>
+                  </div>
+                  <p className="mt-1 whitespace-pre-line text-(--muted)">{item.detail}</p>
+                </li>
+              ))}
+            </ul>
+
+            <h2 className="section-label">Where I&apos;ve studied</h2>
+            <ul className="space-y-2 text-sm">
+              {site.education.map((item) => (
+                <li key={item.school} className="flex flex-wrap justify-between gap-x-4">
+                  <span>
+                    {item.school}, {item.credential}
+                  </span>
+                  <span className="text-(--muted)">{item.dates}</span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-10 text-sm text-(--muted)">
+              {site.person.availability} Say hi at <a className="link" href={`mailto:${site.person.email}`}>{site.person.email}</a>
+            </p>
           </section>
         </main>
-
-        <footer id="contact" className="scroll-mt-20 border-t border-(--line)">
-          <div className="mx-auto flex w-[min(1080px,calc(100%-2.5rem))] flex-col gap-3 py-8 text-base text-(--muted) sm:flex-row sm:items-center sm:justify-between">
-            <a className="link" href={`mailto:${site.person.email}`}>{site.person.email}</a>
-            <p>Designed and built by {site.person.name}</p>
-          </div>
-        </footer>
       </div>
     </div>
   );
