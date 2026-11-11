@@ -29,6 +29,8 @@ function matches(project: Project, query: string) {
     project.ee ? "ee electrical engineering" : "",
     project.ai ? "ai artificial intelligence" : "",
     project.swe ? "swe software engineering" : "",
+    project.hackathon ? "hackathon" : "",
+    project.status ?? "",
     ...project.skills,
   ]
     .join(" ")
@@ -51,6 +53,11 @@ function ProjectCard({ project, onTag }: { project: Project; onTag: (tag: string
     >
       <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className="text-(--muted)">{project.dateLabel}</span>
+        {project.status && (
+          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold uppercase text-amber-800">
+            {project.status}
+          </span>
+        )}
         {project.ee && (
           <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-800">
             <Cpu size={12} /> Electrical Engineering
@@ -65,6 +72,15 @@ function ProjectCard({ project, onTag }: { project: Project; onTag: (tag: string
           <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-800">
             SWE
           </span>
+        )}
+        {project.hackathon && (
+          <button
+            type="button"
+            onClick={() => onTag("Hackathon")}
+            className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-900 transition-colors hover:bg-amber-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700"
+          >
+            Hackathon
+          </button>
         )}
       </div>
       <h3 className="mt-2 text-xl font-semibold">{project.name}</h3>
@@ -224,13 +240,13 @@ export function Portfolio({ site }: { site: Site }) {
 
             <ol className="space-y-10">
               {visible.map((project, index) => (
-                <li key={project.name} className="relative pl-10 md:grid md:grid-cols-2 md:gap-14 md:pl-0">
+                <li key={project.name} className="relative pl-10 md:grid md:grid-cols-2 md:items-start md:gap-x-14 md:pl-0">
                   <span
                     className={`absolute top-6 left-4 size-3 -translate-x-1/2 rounded-full ring-4 ring-(--surface) md:left-1/2 ${
                       project.ee ? "bg-sky-500 shadow-[0_0_10px_2px_rgba(56,152,255,0.6)]" : "bg-stone-400"
                     }`}
                   />
-                  <div className={index % 2 === 0 ? "md:col-start-1" : "md:col-start-2"}>
+                  <div className={index % 2 === 0 ? "md:col-start-1 md:row-start-1" : "md:col-start-2 md:row-start-1"}>
                     <ProjectCard project={project} onTag={toggleTag} />
                   </div>
                 </li>

@@ -1,6 +1,7 @@
 import type { StaticImageData } from "next/image";
 import congressionalAppChallengeLogo from "@/public/caclogo.png";
 import juniorDesignImage from "@/public/juniordesignimage.png";
+import legv8CpuPipelineImage from "@/public/legv8-cpu-pipeline.png";
 import portaPotImage from "@/public/porta-pot.png";
 
 export type Project = {
@@ -11,8 +12,16 @@ export type Project = {
   ee?: boolean;
   ai?: boolean;
   swe?: boolean;
+  hackathon?: boolean;
+  status?: "In Progress";
   archived?: boolean;
   summary: string;
+  star?: {
+    situation: string;
+    task: string;
+    action: string;
+    result: string;
+  };
   skills: string[];
   image?: { src: StaticImageData; alt: string };
   youtubeId?: string;
@@ -21,14 +30,32 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "LEGv8 Single-Cycle CPU",
+    date: "2026-11",
+    dateLabel: "2026",
+    category: "Computer Architecture",
+    ee: true,
+    status: "In Progress",
+    summary:
+      "Designed a 64-bit single-cycle LEGv8 CPU in SystemVerilog with an ALU, register file, control unit, and memory. Supports arithmetic, logical, load/store, and branch instructions, with a Surfer testbench to inspect instructions, registers, and memory.",
+    skills: ["LEGv8", "SystemVerilog", "CPU Architecture", "Surfer"],
+    image: {
+      src: legv8CpuPipelineImage,
+      alt: "Datapath diagram of a pipelined LEGv8 processor",
+    },
+    links: [],
+  },
+  {
     name: "Beacon",
     date: "2026-05",
     dateLabel: "Hackachusetts, 2026",
     category: "Public Safety",
     ee: true,
     swe: true,
+    hackathon: true,
     summary:
       "Firefighter search-priority system that uses Wi-Fi channel state information and a 1-D CNN to detect signs of movement. ESP32 firmware for transmitters, CSI receivers and responder tags, a FastAPI hub, and a live responder dashboard with floor plans.",
+    star: { situation: "", task: "", action: "", result: "" },
     skills: ["ESP32", "C", "Wi-Fi CSI", "TensorFlow Lite", "Python", "FastAPI", "WebSockets", "TypeScript"],
     youtubeId: "2WN5VsAbgl0",
     links: [
@@ -42,8 +69,10 @@ export const projects: Project[] = [
     dateLabel: "Junior Design Project, 2026",
     category: "Robotics",
     ee: true,
+    status: "In Progress",
     summary:
       "ESP32-S3 vehicle with L293D H-bridge dual motor drive, PWM tuning, IR obstacle sensing with ADC conditioning, magnetic encoders and odometry. Chassis designed in Onshape, PCB in KiCad, debugged with an oscilloscope.",
+    star: { situation: "", task: "", action: "", result: "" },
     skills: ["ESP32-S3", "C++", "PlatformIO", "PWM", "ADC", "Encoders", "KiCad", "Onshape", "Oscilloscope"],
     image: { src: juniorDesignImage, alt: "Autonomous robotic vehicle prototype with its electronics and wheels" },
         links: [
@@ -61,6 +90,7 @@ export const projects: Project[] = [
     swe: true,
     summary:
       "Credit-based mentorship exchange for students in the medical pipeline, spanning 91 high schools, 57 colleges and 22 medical schools with 150+ mentorship sessions. I'm the founding technical lead!",
+    star: { situation: "", task: "", action: "", result: "" },
     skills: ["React", "TailwindCSS", "PostgreSQL", "Supabase"],
     links: [{ label: "projectoath.com", href: "https://projectoath.com/" }],
   },
@@ -73,6 +103,7 @@ export const projects: Project[] = [
     swe: true,
     summary:
       "An MCP server that lets AI agents drive Onshape CAD. Built before the official Onshape MCP; appreciated by Jon Hirschtick, founder of SolidWorks and Onshape.",
+    star: { situation: "", task: "", action: "", result: "" },
     skills: ["MCP", "CAD", "Onshape API"],
     youtubeId: "bsL_8EN9Ih0",
     links: [{ label: "GitHub", href: "https://github.com/nisheshnath-spec/OnshapeMCP" }],
@@ -85,6 +116,7 @@ export const projects: Project[] = [
     ee: true,
     summary:
       "Remote-controlled planter for the EE14 embedded systems course. I designed the block diagram and wrote the NRF24L01 SPI radio code; joystick via ADC drives DC motors through a DRV8833.",
+    star: { situation: "", task: "", action: "", result: "" },
     skills: ["SPI", "NRF24L01", "DRV8833", "ADC", "DC Motors", "C"],
     image: { src: portaPotImage, alt: "Porta-Pot planter prototype alongside its electronics block diagram" },
     links: [{ label: "GitHub", href: "https://github.com/natphua/porta-pot" }],
@@ -96,8 +128,10 @@ export const projects: Project[] = [
     category: "Health & Fitness",
     ai: true,
     swe: true,
+    hackathon: true,
     summary:
       "Real-time AI fitness coach built in two days with three friends: pose tracking, rep counting and voice feedback.",
+    star: { situation: "", task: "", action: "", result: "" },
     skills: ["MediaPipe", "Computer Vision", "Flask-SocketIO", "Next.js", "Gemini API", "ElevenLabs"],
     youtubeId: "rpG1Po_12Vk",
     links: [
